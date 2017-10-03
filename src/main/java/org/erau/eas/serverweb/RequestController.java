@@ -1,8 +1,14 @@
-package org.eas.serverweb;
+package org.erau.eas.serverweb;
 
+import org.erau.eas.serverweb.Repository.ConfigRepository;
+import org.erau.eas.serverweb.Repository.DataRepository;
+import org.erau.eas.serverweb.Repository.FlightsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.apache.maven.model.Model;
@@ -22,12 +28,20 @@ public class RequestController {
     //Create Logger
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    //Load database
+    //Load config database
     @Autowired
-    //AddressRepository addressRepository;
+    ConfigRepository configRepository;
+
+    //Load data database
+    @Autowired
+    DataRepository dataRepository;
+
+    //Load flights database
+    @Autowired
+    FlightsRepository flightsRepository;
 
     //Request a mapping from the tomcat server to $theurl/version
-    @RequestMapping("/version")
+    @RequestMapping(value = "/version")
     String version() throws IOException, XmlPullParserException{
         //Open a maven file reader
         MavenXpp3Reader reader = new MavenXpp3Reader();
@@ -37,5 +51,11 @@ public class RequestController {
         log.info("Api version requested and returned as " + model.getVersion());
         //Return the version
         return model.getVersion();
+    }
+
+    @RequestMapping(value = "/data", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> inputData(){
+
+        return new ResponseEntity<Object>("asdf", HttpStatus.OK);
     }
 }

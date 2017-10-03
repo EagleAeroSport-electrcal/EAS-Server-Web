@@ -1,4 +1,4 @@
-package org.eas.serverweb.Model.CompKeys;
+package org.erau.eas.serverweb.db.CompKeys;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

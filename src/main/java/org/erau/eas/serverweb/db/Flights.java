@@ -1,4 +1,4 @@
-package org.eas.serverweb.Model;
+package org.erau.eas.serverweb.db;
 
 import javax.persistence.*;
 import java.sql.Date;

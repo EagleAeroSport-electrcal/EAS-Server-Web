@@ -1,6 +1,6 @@
-package org.eas.serverweb.Model;
+package org.erau.eas.serverweb.db;
 
-import org.eas.serverweb.Model.CompKeys.DataKey;
+import org.erau.eas.serverweb.db.CompKeys.DataKey;
 
 import javax.persistence.*;
 

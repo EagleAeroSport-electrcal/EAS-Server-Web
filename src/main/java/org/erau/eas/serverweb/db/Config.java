@@ -1,11 +1,10 @@
-package org.eas.serverweb.Model;
+package org.erau.eas.serverweb.db;
 
-import org.eas.serverweb.Model.CompKeys.ConfigKey;
+import org.erau.eas.serverweb.db.CompKeys.ConfigKey;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "config")
