@@ -14,7 +14,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.2.RELEASE</version>
+                <version>1.5.7.RELEASE</version>
                 <executions>
                     <execution>
                         <goals>
@@ -51,12 +51,12 @@
             </resource>
         </resources>
     </build>
-    <name>ServerWeb</name>
+    <name>ServerWEB</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.2.RELEASE</version>
+        <version>1.5.7.RELEASE</version>
     </parent>
 
     <repositories>
@@ -84,6 +84,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.6</version>
         </dependency>
 
         <dependency>

@@ -9,22 +9,41 @@ public class DataKey implements Serializable {
 
     private Timestamp timestamp;
 
-    private Long Id;
+    private int boardId;
+
+    private int flightId;
 
     public DataKey() {
     }
 
-    public DataKey(Timestamp timestamp, Long id) {
+    public DataKey(Timestamp timestamp, int boardId, int flightId) {
         this.timestamp = timestamp;
-        Id = id;
+        this.boardId = boardId;
+        this.flightId = flightId;
     }
 
     public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public Long getId() {
-        return Id;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public int getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(int boardId) {
+        this.boardId = boardId;
+    }
+
+    public int getFlightId() {
+        return flightId;
+    }
+
+    public void setFlightId(int flightId) {
+        this.flightId = flightId;
     }
 
     @Override
@@ -34,14 +53,16 @@ public class DataKey implements Serializable {
 
         DataKey dataKey = (DataKey) o;
 
-        if (!getTimestamp().equals(dataKey.getTimestamp())) return false;
-        return getId().equals(dataKey.getId());
+        if (getBoardId() != dataKey.getBoardId()) return false;
+        if (getFlightId() != dataKey.getFlightId()) return false;
+        return getTimestamp().equals(dataKey.getTimestamp());
     }
 
     @Override
     public int hashCode() {
         int result = getTimestamp().hashCode();
-        result = 31 * result + getId().hashCode();
+        result = 31 * result + getBoardId();
+        result = 31 * result + getFlightId();
         return result;
     }
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class ConfigKey implements Serializable {
 
     @Column(name = "flight_id")
-    private Long flightID;
+    private int flightID;
 
     @Column(name = "board_id")
     private int boardId;
@@ -19,13 +19,13 @@ public class ConfigKey implements Serializable {
     public ConfigKey() {
     }
 
-    public ConfigKey(Long flightID, int boardId, int sensorId) {
+    public ConfigKey(int flightID, int boardId, int sensorId) {
         this.flightID = flightID;
         this.boardId = boardId;
         this.sensorId = sensorId;
     }
 
-    public Long getFlightID() {
+    public int getFlightID() {
         return flightID;
     }
 
@@ -44,14 +44,14 @@ public class ConfigKey implements Serializable {
 
         ConfigKey configKey = (ConfigKey) o;
 
+        if (getFlightID() != configKey.getFlightID()) return false;
         if (getBoardId() != configKey.getBoardId()) return false;
-        if (getSensorId() != configKey.getSensorId()) return false;
-        return getFlightID().equals(configKey.getFlightID());
+        return getSensorId() == configKey.getSensorId();
     }
 
     @Override
     public int hashCode() {
-        int result = getFlightID().hashCode();
+        int result = getFlightID();
         result = 31 * result + getBoardId();
         result = 31 * result + getSensorId();
         return result;

@@ -10,7 +10,7 @@ public class Flights {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private int id;
 
     @Column(name = "flight_date")
     private Date flightDate;
@@ -36,11 +36,11 @@ public class Flights {
     public Flights() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
