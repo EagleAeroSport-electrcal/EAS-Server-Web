@@ -1,6 +1,6 @@
 package org.erau.eas.serverweb;
 
-import org.erau.eas.serverweb.Mappings.ConfigReciver;
+import org.erau.eas.serverweb.Mappings.ConfigReceiver;
 import org.erau.eas.serverweb.Repository.BoardIdentityRepository;
 import org.erau.eas.serverweb.Repository.ConfigRepository;
 import org.erau.eas.serverweb.Repository.DataRepository;
@@ -27,7 +27,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by ferrinkatz on 9/17/17.
@@ -35,6 +34,7 @@ import java.util.List;
 
 @RestController
 public class RequestController {
+
 
     //Variable to store current flight
     private Flights flight;
@@ -105,19 +105,36 @@ public class RequestController {
     }
 
     @RequestMapping(value = "/sensorconfig", method = RequestMethod.PUT)
-    public ResponseEntity.BodyBuilder sensorConfig(@RequestBody LinkedList<ConfigReciver> input){
-        for (int i = 0; i < input.size(); i++){
-            ConfigReciver current = input.get(i);
-            ConfigKey configKey = new ConfigKey(current.getFlightID(), current.getBoardId(), current.getSensorId());
-            Config config = new Config();
-            config.setKey(configKey);
-            config.setCalibration(current.getCalibration());
-            config.setType(current.getType());
+    public ResponseEntity<String> sensorConfig(@RequestBody ConfigReceiver input){
 
-            configRepository.save(config);
+        String[] sensorSet = input.getBody().split("-{2,}");
+
+        for(int i = 0; i < (sensorSet.length - 1); i++)
+        {
+            HashMap<String, String> sensorData = new HashMap<String, String>();
+            sensorSet[i] = sensorSet[i].trim();
+            String[] currentSensor = sensorSet[i].split("\\R");
+            for (int j = 0; j < currentSensor.length; j++)
+            {
+                String[] currentSection = currentSensor[j].split(":");
+                currentSection[0]= currentSection[0].trim();
+                currentSection[1]= currentSection[1].trim();
+                sensorData.put(currentSection[0], currentSection[1]);
+            }
+
+            if(sensorData.containsKey("Sensor unique ID"))
+            {
+                ConfigKey configKey = new ConfigKey(input.getFlightID(), input.getBoardId(), Integer.parseInt(sensorData.get("Sensor type")));
+                Config config = new Config();
+                config.setKey(configKey);
+                config.setType(sensorData.get("Sensor type"));
+                config.setCalibration(0);
+
+                configRepository.save(config);
+            }
         }
 
-        return ResponseEntity.ok();
+        return ResponseEntity.ok().body(" ");
     }
 
     @RequestMapping(value = "/data", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
