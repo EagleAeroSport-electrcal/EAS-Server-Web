@@ -1,6 +1,7 @@
 package org.erau.eas.serverweb;
 
 import org.erau.eas.serverweb.Mappings.ConfigReceiver;
+import org.erau.eas.serverweb.Mappings.DataReceiver;
 import org.erau.eas.serverweb.Repository.BoardIdentityRepository;
 import org.erau.eas.serverweb.Repository.ConfigRepository;
 import org.erau.eas.serverweb.Repository.DataRepository;
@@ -104,7 +105,7 @@ public class RequestController {
         return ResponseEntity.ok().body(Integer.toString(flight.getId()));
     }
 
-    @RequestMapping(value = "/sensorconfig", method = RequestMethod.PUT)
+    @RequestMapping(value = "/sensorconfig", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> sensorConfig(@RequestBody ConfigReceiver input){
 
         String[] sensorSet = input.getBody().split("-{2,}");
@@ -124,7 +125,7 @@ public class RequestController {
 
             if(sensorData.containsKey("Sensor unique ID"))
             {
-                ConfigKey configKey = new ConfigKey(input.getFlightID(), input.getBoardId(), Integer.parseInt(sensorData.get("Sensor type")));
+                ConfigKey configKey = new ConfigKey(input.getFlightID(), input.getBoardId(), Integer.parseInt(sensorData.get("Sensor unique ID")));
                 Config config = new Config();
                 config.setKey(configKey);
                 config.setType(sensorData.get("Sensor type"));
@@ -137,8 +138,9 @@ public class RequestController {
         return ResponseEntity.ok().body(" ");
     }
 
-    @RequestMapping(value = "/data", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> inputData(){
-        return ResponseEntity.ok().body("data");
+    @RequestMapping(value = "/data", method = RequestMethod.PUT)
+    public ResponseEntity<String> inputData(@RequestBody DataReceiver input){
+        System.out.println(input.toString());
+        return ResponseEntity.ok().body(" ");
     }
 }
