@@ -5,6 +5,8 @@ public class DataReceiver {
 
     private int deviceId;
 
+    private long packetSize;
+
     private byte[] data;
 
     public int getFlightId() {
@@ -21,6 +23,14 @@ public class DataReceiver {
 
     public void setDeviceId(int deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public long getPacketSize() {
+        return packetSize;
+    }
+
+    public void setPacketSize(long packetSize) {
+        this.packetSize = packetSize;
     }
 
     public byte[] getData() {

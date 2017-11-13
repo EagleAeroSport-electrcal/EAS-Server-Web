@@ -115,11 +115,10 @@ public class RequestController {
             HashMap<String, String> sensorData = new HashMap<String, String>();
             sensorSet[i] = sensorSet[i].trim();
             String[] currentSensor = sensorSet[i].split("\\R");
-            for (int j = 0; j < currentSensor.length; j++)
-            {
-                String[] currentSection = currentSensor[j].split(":");
-                currentSection[0]= currentSection[0].trim();
-                currentSection[1]= currentSection[1].trim();
+            for (String aCurrentSensor : currentSensor) {
+                String[] currentSection = aCurrentSensor.split(":");
+                currentSection[0] = currentSection[0].trim();
+                currentSection[1] = currentSection[1].trim();
                 sensorData.put(currentSection[0], currentSection[1]);
             }
 
@@ -140,7 +139,8 @@ public class RequestController {
 
     @RequestMapping(value = "/data", method = RequestMethod.PUT)
     public ResponseEntity<String> inputData(@RequestBody DataReceiver input){
-        System.out.println(input.toString());
+        int numberOfDevices = configRepository.countDistinctByKey_BoardIdAndKey_FlightID(input.getDeviceId(),input.getFlightId()) + 1;
+
         return ResponseEntity.ok().body(" ");
     }
 }

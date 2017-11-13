@@ -6,4 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ConfigRepository extends CrudRepository<Config, ConfigKey>{
 
+    int countDistinctByKey_BoardIdAndKey_FlightID(int boardId, int FlightId);
 }
+
