@@ -24,7 +24,7 @@ public class ConfigKeyTest {
         ConfigKey configKey2 = new ConfigKey(1,1,1);
         ConfigKey configKey3 = new ConfigKey(2,2,2);
 
-        assertFalse(configKey1.equals(configKey3));
+        assertNotEquals(true, configKey1.equals(configKey3));
         assertTrue(configKey1.equals(configKey2));
     }
 

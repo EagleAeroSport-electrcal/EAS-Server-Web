@@ -1,6 +1,5 @@
 package org.erau.eas.serverweb.db.CompKeys;
 
-import org.erau.eas.serverweb.db.Data;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.sql.Timestamp;
@@ -19,7 +18,6 @@ public class DataKeyTest {
     @Test
     public void hashCodeTest(){
         DataKey dataKey = new DataKey(Timestamp.valueOf("2018-04-23 12:48:05"),1,1);
-        System.out.println(dataKey.hashCode());
         assertEquals(587994634,dataKey.hashCode());
     }
 
