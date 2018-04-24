@@ -9,6 +9,7 @@ import org.erau.eas.serverweb.Repository.FlightsRepository;
 import org.erau.eas.serverweb.db.BoardIdentity;
 import org.erau.eas.serverweb.db.CompKeys.ConfigKey;
 import org.erau.eas.serverweb.db.Config;
+import org.erau.eas.serverweb.db.Data;
 import org.erau.eas.serverweb.db.Flights;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +99,7 @@ public class RequestController {
 
     @RequestMapping(value = "/getflight", method = RequestMethod.GET)
     public ResponseEntity<String> getFlight(){
-        if (!flightsRepository.exists(flight.getId())) {
+        if (!flightsRepository.existsById(flight.getId())) {
             flightsRepository.save(flight);
         }
 
@@ -137,7 +138,7 @@ public class RequestController {
         return ResponseEntity.ok().body(" ");
     }
 
-    @RequestMapping(value = "/data", method = RequestMethod.PUT)
+    @RequestMapping(value = "/dataput", method = RequestMethod.PUT)
     public ResponseEntity<String> inputData(@RequestBody DataReceiver input){
         int numberOfDevices = configRepository.countDistinctByKey_BoardIdAndKey_FlightID(input.getDeviceId(),input.getFlightId()) + 1;
 

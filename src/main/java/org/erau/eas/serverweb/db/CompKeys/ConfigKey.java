@@ -16,6 +16,10 @@ public class ConfigKey implements Serializable {
     @Column(name = "sensor_id")
     private int sensorId;
 
+    public ConfigKey(){
+
+    }
+
     public ConfigKey(int flightID, int boardId, int sensorId) {
         this.flightID = flightID;
         this.boardId = boardId;
