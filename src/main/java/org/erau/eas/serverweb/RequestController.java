@@ -141,7 +141,19 @@ public class RequestController {
     @RequestMapping(value = "/dataput", method = RequestMethod.PUT)
     public ResponseEntity<String> inputData(@RequestBody DataReceiver input){
         int numberOfDevices = configRepository.countDistinctByKey_BoardIdAndKey_FlightID(input.getDeviceId(),input.getFlightId()) + 1;
-
+        byte[] inputData = input.getData();
+        for(int i = 0; i < (inputData.length / (numberOfDevices*input.getPacketSize())); i++)
+        {
+            Data data = new Data();
+            for (int j = 0; j < numberOfDevices; j++) {
+                switch (j){
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                }
+            }
+        }
         return ResponseEntity.ok().body(" ");
     }
 }
