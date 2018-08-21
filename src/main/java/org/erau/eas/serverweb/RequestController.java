@@ -10,7 +10,7 @@ import org.erau.eas.serverweb.db.BoardIdentity;
 import org.erau.eas.serverweb.db.CompKeys.ConfigKey;
 import org.erau.eas.serverweb.db.Config;
 import org.erau.eas.serverweb.db.Data;
-import org.erau.eas.serverweb.db.Flights;
+import org.erau.eas.serverweb.db.Flight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,31 +39,32 @@ public class RequestController {
 
 
     //Variable to store current flight
-    private Flights flight;
+    private Flight flight;
 
     //Create Logger
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     //Load config database
-    @Autowired
-    ConfigRepository configRepository;
+    private final ConfigRepository configRepository;
 
     //Load data database
-    @Autowired
-    DataRepository dataRepository;
+    private final DataRepository dataRepository;
 
     //Load flights database
-    @Autowired
-    FlightsRepository flightsRepository;
+    private final FlightsRepository flightsRepository;
 
     //Load boardidentity database
-    @Autowired
-    BoardIdentityRepository boardIdentityRepository;
+    private final BoardIdentityRepository boardIdentityRepository;
 
-    public RequestController() {
+    @Autowired
+    public RequestController(ConfigRepository configRepository, DataRepository dataRepository, FlightsRepository flightsRepository, BoardIdentityRepository boardIdentityRepository) {
         LocalDate localDate = LocalDate.now(ZoneId.of("America/Phoenix"));
-        flight = new Flights();
+        flight = new Flight();
         flight.setFlightDate(Date.valueOf(localDate));
+        this.configRepository = configRepository;
+        this.dataRepository = dataRepository;
+        this.flightsRepository = flightsRepository;
+        this.boardIdentityRepository = boardIdentityRepository;
     }
 
     //Request a mapping from the tomcat server to $theurl/version

@@ -6,7 +6,7 @@ import java.sql.Time;
 
 @Entity
 @Table(name = "flights")
-public class Flights {
+public class Flight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +33,7 @@ public class Flights {
     @Column(name = "flight_end_time")
     private Time flightEndTime;
 
-    public Flights() {
+    public Flight() {
     }
 
     public int getId() {
