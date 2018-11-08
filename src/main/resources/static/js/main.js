@@ -1,11 +1,11 @@
-var documentReady = false;
-var $content = $("#content");
-var $charts = $("#charts");
-var $submitButton = $("#btn1");
-var $sensorSelect = $("#sensor_Select");
-var charts = [];
+let documentReady = false;
+let $content = $("#content");
+let $charts = $("#charts");
+let $submitButton = $("#btn1");
+let $sensorSelect = $("#sensor_Select");
+let charts = [];
 
-var LineChart;
+let LineChart;
 // noinspection BadExpressionStatementJS
 LineChart = {
     ctx:"",
@@ -17,18 +17,21 @@ LineChart = {
 
     addData: function (label, data) {
         this.chart.data.labels.push(label);
-        for(var i = 0; i < this.chart.data.datasets.length; i++){
-            this.chart.data.datasets[i].data.push(data);
-        }
-
+        // for(let i = 0; i < this.chart.data.datasets.length; i++){
+        //     this.chart.data.datasets[i].data.push(data);
+        // }
+        for (let dataset of this.chart.data.datasets)
+            dataset.data.push(data);
         this.chart.update();
     },
 
     removeData: function () {
         this.chart.data.labels.shift();
-        for(var i = 0; i < this.chart.data.datasets.length; i++){
-            this.chart.data.datasets[i].data.shift();
-        }
+        // for(let i = 0; i < this.chart.data.datasets.length; i++){
+        //     this.chart.data.datasets[i].data.shift();
+        // }
+        for (let dataset of this.chart.data.datasets)
+            dataset.data.shift();
         this.chart.update();
     },
 
@@ -68,9 +71,9 @@ LineChart = {
     }
 };
 
-var data = 1;
+let data = 1;
 function addData(ac) {
-    data = data + Math.round(5 + Math.random() * (-5 - 5));
+    data += Math.round((10 * Math.random() - 5) - (.01 * data));
 
     if (ac.chart.data.datasets[0].data.length > 30) {
         ac.updateChart(Date.now(), data);
@@ -80,27 +83,39 @@ function addData(ac) {
     }
 }
 
+
+function makeChart(id) {
+    let chart = Object.create(LineChart);
+    chart.ctx = $(`#${id}`);
+    charts.push(chart);
+    chart.buttonFunction();
+
+    // relabel chart
+    chart.chart.data.datasets[0].label = id;
+}
+
+function makeCharts(ids) {
+    // gen html
+    let chartsDIV = document.getElementById("charts");
+    for (let id of ids)
+        chartsDIV.innerHTML += `<canvas id="${id}"/>`;
+
+    // gen charts
+    for (let id of ids)
+        makeChart(id);
+}
+
 $(document).ready(function() {
     console.info("Page Loaded");
-    $charts.hide()
+    $charts.hide();
 
-    var chart1 = Object.create(LineChart);
-    chart1.ctx =  $("#chart1");
-
-    charts.push(chart1);
-
-    var chart2 = Object.create(LineChart);
-    chart2.ctx = $("#chart2");
-
-    charts.push(chart2)
-
-    charts[0].buttonFunction();
-
-    charts[1].buttonFunction();
+    let ids = ["ch1", "bEST_cHART", "i_like_charts", "mostGudChart"];
+    // let ids = [];
+    // for (let i = 0; i < 10; i++)
+    //     ids[i] = "chart" + i;
+    makeCharts(ids);
 
     documentReady = true;
-
-
 });
 
 $submitButton.on('click', function (e) {
@@ -108,11 +123,10 @@ $submitButton.on('click', function (e) {
         $charts.show();
         $sensorSelect.hide();
 
-        setInterval(function () {
-            addData(charts[0])
-        }, 1000);
-        setInterval(function () {
-            addData(charts[1])
-        }, 1000);
+        for (let chart of charts) {
+            setInterval(function() {
+                addData(chart);
+            }, 1000);
+        }
     }
 })
