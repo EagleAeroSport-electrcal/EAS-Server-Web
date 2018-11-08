@@ -8,6 +8,7 @@ import org.erau.eas.serverweb.Repository.DataRepository;
 import org.erau.eas.serverweb.Repository.FlightsRepository;
 import org.erau.eas.serverweb.db.BoardIdentity;
 import org.erau.eas.serverweb.db.CompKeys.ConfigKey;
+import org.erau.eas.serverweb.db.CompKeys.DataKey;
 import org.erau.eas.serverweb.db.Config;
 import org.erau.eas.serverweb.db.Data;
 import org.erau.eas.serverweb.db.Flight;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -143,17 +145,13 @@ public class RequestController {
     public ResponseEntity<String> inputData(@RequestBody DataReceiver input){
         int numberOfDevices = configRepository.countDistinctByKey_BoardIdAndKey_FlightID(input.getDeviceId(),input.getFlightId()) + 1;
         byte[] inputData = input.getData();
-        for(int i = 0; i < (inputData.length / (numberOfDevices*input.getPacketSize())); i++)
+        long numPackets = inputData.length / (numberOfDevices*input.getPacketSize());
+        for(int i = 0; i < numPackets; i++)
         {
+            DataKey dataKey = new DataKey();
             Data data = new Data();
-            for (int j = 0; j < numberOfDevices; j++) {
-                switch (j){
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                }
-            }
+            data.setRawData(Arrays.copyOfRange(inputData, Math.toIntExact(i * input.getPacketSize()), Math.toIntExact((i + 1) * input.getPacketSize())));
+
         }
         return ResponseEntity.ok().body(" ");
     }
