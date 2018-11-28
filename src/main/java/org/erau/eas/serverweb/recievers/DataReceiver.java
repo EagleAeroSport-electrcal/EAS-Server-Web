@@ -1,6 +1,6 @@
-package org.erau.eas.serverweb.Mappings;
+package org.erau.eas.serverweb.recievers;
 
-public class DataReceiver {
+public class    DataReceiver {
     private int flightId;
 
     private int deviceId;

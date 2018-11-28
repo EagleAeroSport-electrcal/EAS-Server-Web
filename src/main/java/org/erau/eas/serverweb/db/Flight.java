@@ -1,11 +1,15 @@
 package org.erau.eas.serverweb.db;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
 
+
 @Entity
 @Table(name = "flights")
+@Data
 public class Flight {
 
     @Id
@@ -32,71 +36,4 @@ public class Flight {
 
     @Column(name = "flight_end_time")
     private Time flightEndTime;
-
-    public Flight() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getFlightDate() {
-        return flightDate;
-    }
-
-    public void setFlightDate(Date flightDate) {
-        this.flightDate = flightDate;
-    }
-
-    public int getPilotWeight() {
-        return pilotWeight;
-    }
-
-    public void setPilotWeight(int pilotWeight) {
-        this.pilotWeight = pilotWeight;
-    }
-
-    public int getFuelLoad() {
-        return fuelLoad;
-    }
-
-    public void setFuelLoad(int fuelLoad) {
-        this.fuelLoad = fuelLoad;
-    }
-
-    public String getTakeoffAirport() {
-        return takeoffAirport;
-    }
-
-    public void setTakeoffAirport(String takeoffAirport) {
-        this.takeoffAirport = takeoffAirport;
-    }
-
-    public String getDestinationAirport() {
-        return destinationAirport;
-    }
-
-    public void setDestinationAirport(String destinationAirport) {
-        this.destinationAirport = destinationAirport;
-    }
-
-    public Time getFlightStartTime() {
-        return flightStartTime;
-    }
-
-    public void setFlightStartTime(Time flightStartTime) {
-        this.flightStartTime = flightStartTime;
-    }
-
-    public Time getFlightEndTime() {
-        return flightEndTime;
-    }
-
-    public void setFlightEndTime(Time flightEndTime) {
-        this.flightEndTime = flightEndTime;
-    }
 }

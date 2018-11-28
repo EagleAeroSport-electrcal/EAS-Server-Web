@@ -1,34 +1,32 @@
 package org.erau.eas.serverweb;
 
-import org.erau.eas.serverweb.Mappings.ConfigReceiver;
-import org.erau.eas.serverweb.Mappings.DataReceiver;
-import org.erau.eas.serverweb.Repository.BoardIdentityRepository;
-import org.erau.eas.serverweb.Repository.ConfigRepository;
-import org.erau.eas.serverweb.Repository.DataRepository;
-import org.erau.eas.serverweb.Repository.FlightsRepository;
-import org.erau.eas.serverweb.db.BoardIdentity;
-import org.erau.eas.serverweb.db.CompKeys.ConfigKey;
-import org.erau.eas.serverweb.db.CompKeys.DataKey;
-import org.erau.eas.serverweb.db.Config;
-import org.erau.eas.serverweb.db.Data;
-import org.erau.eas.serverweb.db.Flight;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.erau.eas.serverweb.Repository.BoardIdentityRepository;
+import org.erau.eas.serverweb.Repository.ConfigRepository;
+import org.erau.eas.serverweb.Repository.FlightsRepository;
+import org.erau.eas.serverweb.db.BoardIdentity;
+import org.erau.eas.serverweb.db.CompKeys.ConfigKey;
+import org.erau.eas.serverweb.db.Config;
+import org.erau.eas.serverweb.db.Flight;
+import org.erau.eas.serverweb.recievers.ConfigReceiver;
+import org.erau.eas.serverweb.recievers.DataReceiver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -36,6 +34,7 @@ import java.util.LinkedList;
  * Created by ferrinkatz on 9/17/17.
  */
 
+@Slf4j
 @RestController
 public class RequestController {
 
@@ -43,28 +42,25 @@ public class RequestController {
     //Variable to store current flight
     private Flight flight;
 
-    //Create Logger
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    //Variable to strore configuration
+    private HashMap<Integer, ArrayList<Config>> configs;
 
     //Load config database
     private final ConfigRepository configRepository;
 
-    //Load data database
-    private final DataRepository dataRepository;
-
     //Load flights database
     private final FlightsRepository flightsRepository;
 
-    //Load boardidentity database
+    //Load board identity database
     private final BoardIdentityRepository boardIdentityRepository;
 
     @Autowired
-    public RequestController(ConfigRepository configRepository, DataRepository dataRepository, FlightsRepository flightsRepository, BoardIdentityRepository boardIdentityRepository) {
+    public RequestController(ConfigRepository configRepository, FlightsRepository flightsRepository, BoardIdentityRepository boardIdentityRepository) {
         LocalDate localDate = LocalDate.now(ZoneId.of("America/Phoenix"));
         flight = new Flight();
+        configs = new HashMap<>();
         flight.setFlightDate(Date.valueOf(localDate));
         this.configRepository = configRepository;
-        this.dataRepository = dataRepository;
         this.flightsRepository = flightsRepository;
         this.boardIdentityRepository = boardIdentityRepository;
     }
@@ -112,6 +108,12 @@ public class RequestController {
     @RequestMapping(value = "/sensorconfig", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> sensorConfig(@RequestBody ConfigReceiver input){
 
+        if (!configs.containsKey(input.getBoardId())){
+            configs.put(input.getBoardId(), new ArrayList<>());
+        }
+
+        ArrayList<Config> temp = configs.get(input.getBoardId());
+
         String[] sensorSet = input.getBody().split("-{2,}");
 
         for(int i = 0; i < (sensorSet.length - 1); i++)
@@ -132,11 +134,15 @@ public class RequestController {
                 Config config = new Config();
                 config.setKey(configKey);
                 config.setType(sensorData.get("Sensor type"));
-                config.setCalibration(0);
+                config.setCalibration(0);  //TODO Add calibration constant get for sensors with calibration
+
+                temp.add(config);
 
                 configRepository.save(config);
             }
         }
+
+        configs.replace(input.getBoardId(), temp);
 
         return ResponseEntity.ok().body(" ");
     }
@@ -148,9 +154,6 @@ public class RequestController {
         long numPackets = inputData.length / (numberOfDevices*input.getPacketSize());
         for(int i = 0; i < numPackets; i++)
         {
-            DataKey dataKey = new DataKey();
-            Data data = new Data();
-            data.setRawData(Arrays.copyOfRange(inputData, Math.toIntExact(i * input.getPacketSize()), Math.toIntExact((i + 1) * input.getPacketSize())));
 
         }
         return ResponseEntity.ok().body(" ");

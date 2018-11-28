@@ -1,4 +1,4 @@
-package org.erau.eas.serverweb.Mappings;
+package org.erau.eas.serverweb.recievers;
 
 public class ConfigReceiver {
     private int flightID;

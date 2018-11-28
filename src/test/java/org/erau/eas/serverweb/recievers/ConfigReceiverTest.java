@@ -1,4 +1,4 @@
-package org.erau.eas.serverweb.Mappings;
+package org.erau.eas.serverweb.recievers;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
