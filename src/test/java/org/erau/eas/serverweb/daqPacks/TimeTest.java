@@ -8,6 +8,10 @@ import org.junit.Test;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TimeTest {
     DataKey dataKey;
@@ -23,6 +27,8 @@ public class TimeTest {
         System.out.println(Arrays.toString(input));
         Time time = new Time(input, dataKey);
 
-        assert true;
+        assertEquals(20000, time.getCourse());
+        assertTrue(new Date(1477629560).equals(time.getTv_sec()));
+        assertEquals(47409150, time.getTv_nsec());
     }
 }

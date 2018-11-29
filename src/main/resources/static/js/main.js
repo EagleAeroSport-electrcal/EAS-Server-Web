@@ -10,16 +10,14 @@ let LineChart;
 LineChart = {
     ctx:"",
     chart:"",
+    data:1,
 
     getLength: function () {
         return this.chart.datasets.length;
     },
 
-    addData: function (label, data) {
+    addDataPoint: function (label, data) {
         this.chart.data.labels.push(label);
-        // for(let i = 0; i < this.chart.data.datasets.length; i++){
-        //     this.chart.data.datasets[i].data.push(data);
-        // }
         for (let dataset of this.chart.data.datasets)
             dataset.data.push(data);
         this.chart.update();
@@ -27,9 +25,6 @@ LineChart = {
 
     removeData: function () {
         this.chart.data.labels.shift();
-        // for(let i = 0; i < this.chart.data.datasets.length; i++){
-        //     this.chart.data.datasets[i].data.shift();
-        // }
         for (let dataset of this.chart.data.datasets)
             dataset.data.shift();
         this.chart.update();
@@ -37,7 +32,18 @@ LineChart = {
 
     updateChart: function (label, data) {
         this.removeData();
-        this.addData(label, data);
+        this.addDataPoint(label, data);
+    },
+
+    addData: function() {
+        this.data += Math.round((10 * Math.random() - 5) - (.01 * this.data));
+
+        if (this.chart.data.datasets[0].data.length >= 30) {
+            this.updateChart(Date.now(), this.data);
+        }
+        else{
+            this.addDataPoint(Date.now(), this.data);
+        }
     },
 
     buttonFunction: function () {
@@ -71,18 +77,6 @@ LineChart = {
     }
 };
 
-let data = 1;
-function addData(ac) {
-    data += Math.round((10 * Math.random() - 5) - (.01 * data));
-
-    if (ac.chart.data.datasets[0].data.length > 30) {
-        ac.updateChart(Date.now(), data);
-    }
-    else{
-        ac.addData(Date.now(), data);
-    }
-}
-
 
 function makeChart(id) {
     let chart = Object.create(LineChart);
@@ -96,9 +90,8 @@ function makeChart(id) {
 
 function makeCharts(ids) {
     // gen html
-    let chartsDIV = document.getElementById("charts");
     for (let id of ids)
-        chartsDIV.innerHTML += `<canvas id="${id}"/>`;
+        $charts.append(`<canvas id="${id}"/>`);
 
     // gen charts
     for (let id of ids)
@@ -125,7 +118,7 @@ $submitButton.on('click', function (e) {
 
         for (let chart of charts) {
             setInterval(function() {
-                addData(chart);
+                chart.addData();
             }, 1000);
         }
     }
