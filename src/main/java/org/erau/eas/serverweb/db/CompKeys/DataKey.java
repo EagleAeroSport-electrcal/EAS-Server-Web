@@ -1,5 +1,6 @@
 package org.erau.eas.serverweb.db.CompKeys;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import java.sql.Timestamp;
 
 @Data
 @Embeddable
+@AllArgsConstructor
 public class DataKey implements Serializable {
 
     private Timestamp timestamp;

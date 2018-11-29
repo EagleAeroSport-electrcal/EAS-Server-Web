@@ -42,7 +42,7 @@ public class RequestController {
     //Variable to store current flight
     private Flight flight;
 
-    //Variable to strore configuration
+    //Variable to store configuration
     private HashMap<Integer, ArrayList<Config>> configs;
 
     //Load config database

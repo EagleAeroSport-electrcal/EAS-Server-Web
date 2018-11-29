@@ -6,10 +6,9 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
 
-
+@Data
 @Entity
 @Table(name = "flights")
-@Data
 public class Flight {
 
     @Id
