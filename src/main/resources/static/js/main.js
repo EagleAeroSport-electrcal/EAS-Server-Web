@@ -77,6 +77,8 @@ LineChart = {
     }
 };
 
+//Server send event info web page https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+
 
 function makeChart(id) {
     let chart = Object.create(LineChart);

@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -18,7 +17,7 @@ public class TimeTest {
 
     @Before
     public void setUp(){
-        dataKey = new DataKey(Timestamp.valueOf("2018-04-23 12:48:05"), 1, 1, 1);
+        dataKey = new DataKey(Timestamp.valueOf("2018-04-23 12:48:05"), 1, 1, 0);
     }
 
     @Test
@@ -28,7 +27,8 @@ public class TimeTest {
         Time time = new Time(input, dataKey);
 
         assertEquals(20000, time.getCourse());
-        assertTrue(new Date(1477629560).equals(time.getTv_sec()));
+        assertTrue(new Timestamp(1477629560000L).equals(time.getTv_sec()));
         assertEquals(47409150, time.getTv_nsec());
+        assertEquals(1, time.getDataKey().getSensorId());
     }
 }
