@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.UUID;
 
 /**
  * Created by ferrinkatz on 9/17/17.
@@ -31,7 +32,27 @@ public class RequestController {
 
     @RequestMapping(value = "/getid", method = RequestMethod.POST)
     public ResponseEntity<String> getid(@RequestBody() String macAddress){
-        return null;
+
+  Jedis jedis = new Jedis("localhost");
+  String id = null;
+
+        try {
+          if(jedis.get(macAddress) == null) {
+
+            UUID newID = UUID.randomUUID();
+            id = newID.toString();
+            jedis.set(macAddress, id);
+          }else {
+
+            id = jedis.get(macAddress);
+
+          }
+        }
+        catch(Exception e){
+
+        }
+
+        return id;
     }
 
     @RequestMapping(value = "/getflight", method = RequestMethod.GET)
