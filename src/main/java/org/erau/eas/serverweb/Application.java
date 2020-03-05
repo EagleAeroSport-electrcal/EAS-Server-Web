@@ -3,7 +3,6 @@ package org.erau.eas.serverweb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
  * Created by ferrinkatz on 9/17/17.
@@ -11,7 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"org.erau.eas.serverweb"})
-@EnableJpaRepositories(basePackages =  {"org.erau.eas.serverweb"})
 public class Application{
 
     public static void main(String[] args) {
