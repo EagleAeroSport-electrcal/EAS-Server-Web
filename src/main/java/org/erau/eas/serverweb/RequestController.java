@@ -3,6 +3,8 @@ package org.erau.eas.serverweb;
 import lombok.extern.slf4j.Slf4j;
 import org.erau.eas.serverweb.recievers.ConfigReceiver;
 import org.erau.eas.serverweb.recievers.DataReceiver;
+import org.erau.eas.serverweb.redis.objects.BoardID;
+import org.erau.eas.serverweb.redis.repositories.BoardIDRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.UUID;
+import java.util.Optional;
 
 /**
  * Created by ferrinkatz on 9/17/17.
@@ -25,34 +27,27 @@ import java.util.UUID;
 public class RequestController {
     LocalDate localDate;
 
+    BoardIDRepository boardIDRepository;
+
     @Autowired
-    public RequestController() {
+    public RequestController(BoardIDRepository boardIDRepository) {
         LocalDate localDate = LocalDate.now(ZoneId.of("America/Phoenix"));
+        this.boardIDRepository = boardIDRepository;
     }
 
     @RequestMapping(value = "/getid", method = RequestMethod.POST)
     public ResponseEntity<String> getid(@RequestBody() String macAddress){
-
-  Jedis jedis = new Jedis("localhost");
-  String id = null;
-
-        try {
-          if(jedis.get(macAddress) == null) {
-
-            UUID newID = UUID.randomUUID();
-            id = newID.toString();
-            jedis.set(macAddress, id);
-          }else {
-
-            id = jedis.get(macAddress);
-
-          }
-        }
-        catch(Exception e){
-
+        macAddress = macAddress.replaceAll("[\\s\\-]", "");
+        Optional<BoardID> optionalBoardID = boardIDRepository.findById(macAddress);
+        if (optionalBoardID.isEmpty()){
+            BoardID newBoard = new BoardID(macAddress);
+            boardIDRepository.save(newBoard);
+            return ResponseEntity.ok(newBoard.getBoardID().toString());
+        } else {
+            BoardID board = optionalBoardID.get();
+            return ResponseEntity.ok(board.getBoardID().toString());
         }
 
-        return id;
     }
 
     @RequestMapping(value = "/getflight", method = RequestMethod.GET)
