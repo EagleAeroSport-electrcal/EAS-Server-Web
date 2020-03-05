@@ -14,6 +14,7 @@ public class BoardID {
 
     private UUID boardID;
 
+
     public BoardID(String macAddress){
         this.macAddress = macAddress;
         this.boardID = UUID.randomUUID();
