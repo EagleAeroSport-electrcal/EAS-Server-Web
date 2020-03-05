@@ -100,6 +100,7 @@
                     <artifactId>commons-logging:commons-logging:1.2</artifactId>
                 </exclusion>
             </exclusions>
+
         </dependency>
 
     </dependencies>
