@@ -75,3 +75,5 @@ fabric.properties
 
 #Target folder
 /target/
+
+/logs/
