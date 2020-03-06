@@ -5,6 +5,7 @@ import org.erau.eas.serverweb.recievers.ConfigReceiver;
 import org.erau.eas.serverweb.recievers.DataReceiver;
 import org.erau.eas.serverweb.redis.objects.BoardID;
 import org.erau.eas.serverweb.redis.repositories.BoardIDRepository;
+import org.erau.eas.serverweb.redis.repositories.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +27,16 @@ import java.util.Optional;
 @RestController
 public class RequestController {
     LocalDate localDate;
+    ZoneId currentZoneId = ZoneId.of("America/Phoenix");
 
     BoardIDRepository boardIDRepository;
+    FlightRepository flightRepository;
 
     @Autowired
-    public RequestController(BoardIDRepository boardIDRepository) {
-        LocalDate localDate = LocalDate.now(ZoneId.of("America/Phoenix"));
+    public RequestController(BoardIDRepository boardIDRepository, FlightRepository flightRepository) {
+        LocalDate localDate = LocalDate.now(currentZoneId);
         this.boardIDRepository = boardIDRepository;
+        this.flightRepository = flightRepository;
     }
 
     @RequestMapping(value = "/getid", method = RequestMethod.POST)
@@ -52,7 +56,18 @@ public class RequestController {
 
     @RequestMapping(value = "/getflight", method = RequestMethod.GET)
     public ResponseEntity<String> getFlight(){
-        return null;
+        String epoch = "" + localDate.atStartOfDay(currentZoneId).toEpochSecond();
+        Optional<Flight> optionalFlight = flightRepository.findById(epoch);
+
+        if (optionalFlight.isEmpty()) {
+            Flight newFlight = new Flight();
+            flightRepository.save(newFlight);
+            return ResponseEntity.ok(newFlight.getFlightData);
+        }
+        else {
+            Flight flight = optionalFlight.get();
+            return ResponseEntity.ok(flight.getFlightData);
+        }
     }
 
     @RequestMapping(value = "/sensorconfig", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
