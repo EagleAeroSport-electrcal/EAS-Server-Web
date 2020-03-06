@@ -60,15 +60,17 @@ public class RequestController {
         String epoch = "" + localDate.atStartOfDay(currentZoneId).toEpochSecond();
         Optional<Flight> optionalFlight = flightRepository.findById(epoch);
 
+        Flight flight;
+
         if (optionalFlight.isEmpty()) {
-            Flight newFlight = new Flight(epoch);
-            flightRepository.save(newFlight);
-            return ResponseEntity.ok(newFlight.getFlightData());
+            flight = new Flight(epoch);
+            flightRepository.save(flight);
         }
         else {
-            Flight flight = optionalFlight.get();
-            return ResponseEntity.ok(flight.getFlightData());
+            flight = optionalFlight.get();
         }
+
+        return ResponseEntity.ok(flight.getFlightData());
     }
 
     @RequestMapping(value = "/sensorconfig", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

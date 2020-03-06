@@ -12,7 +12,7 @@ public class Flight {
 
     private String flightData;
 
-    
+
     public Flight(String epochSeconds) {
         this.epochSeconds = epochSeconds;
         flightData = "";
