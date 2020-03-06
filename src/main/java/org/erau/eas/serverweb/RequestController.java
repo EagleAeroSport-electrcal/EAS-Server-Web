@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.erau.eas.serverweb.recievers.ConfigReceiver;
 import org.erau.eas.serverweb.recievers.DataReceiver;
 import org.erau.eas.serverweb.redis.objects.BoardID;
+import org.erau.eas.serverweb.redis.objects.Flight;
 import org.erau.eas.serverweb.redis.repositories.BoardIDRepository;
 import org.erau.eas.serverweb.redis.repositories.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,13 +61,13 @@ public class RequestController {
         Optional<Flight> optionalFlight = flightRepository.findById(epoch);
 
         if (optionalFlight.isEmpty()) {
-            Flight newFlight = new Flight();
+            Flight newFlight = new Flight(epoch);
             flightRepository.save(newFlight);
-            return ResponseEntity.ok(newFlight.getFlightData);
+            return ResponseEntity.ok(newFlight.getFlightData());
         }
         else {
             Flight flight = optionalFlight.get();
-            return ResponseEntity.ok(flight.getFlightData);
+            return ResponseEntity.ok(flight.getFlightData());
         }
     }
 
